@@ -85,6 +85,18 @@ ui <- fluidPage(
                                        "Octol_tyrt", "Satch_mamm"))
                      ),
         
+         selectInput(inputId = "plotname",
+                    label = "Name of the plot to save",
+                    choices = list("Richness map" = "Map",
+                                   "Future richness map" = "FutureMap",
+                                   "Species distribution" = "SpeciesMap")),
+         
+         textInput(inputId = "filename",
+                   label = "Name of the .png file",
+                   placeholder = "Example_name"),
+         
+         downloadButton("saving", label = "Save plot as .png"),
+         
          p("Please be patient, map is LOADING")
          
         ),
@@ -136,10 +148,6 @@ server <- function(input, output) {
         }
         print(plot_map)
         
-        # save plot if save==TRUE
-        #png(file=paste0(here::here(), "/figures/SpeciesRichness_", input$year,"_Lumbricidae.png"),width=1000, height=1000)
-        #print(plot_map)
-        #dev.off()
     })
     
     output$FutureMap <- renderPlot({
@@ -178,6 +186,19 @@ server <- function(input, output) {
       print(plot_speciesmap)
       
     })
+    
+    
+    output$saving <- downloadHandler(
+      
+        file = paste0(input$filename, ".png"),
+        content = function(file) {
+          png(file = file)
+          if(input$plotname == "Map") print(plot_map)
+          if(input$plotname == "FutureMap") print(plot_futuremap)
+          if(input$plotname == "SpeciesMap") print(plot_speciesmap)
+          dev.off()
+        })
+    
 }
 
 # Run the application 
