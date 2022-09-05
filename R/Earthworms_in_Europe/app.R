@@ -8,7 +8,10 @@
 #
 
 library(shiny)
+library(tidyverse)
 load("richness_df.RData") #richness_df
+load("species_df.RData") #species_df
+load("uncertain_df.RData") #uncertain_df
 
 richness_df <- richness_df %>% filter(!is.na(Change)) %>% filter(FutureRichness!=0 & Richness!=0)
 
@@ -23,20 +26,77 @@ ui <- fluidPage(
 
     # Application title
     titlePanel("Earthworm species distributions in Europe"),
-
+    
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
-            radioButtons(inputId = "year",
-                        label = "Time:",
-                        choices = list("Current" = "Richness", 
-                                       "Future (2041-2070)" = "FutureRichness", 
-                                       "Change C-F" = "Change_f"))
+          
+          p("Earthworm species richness in Europe"),
+   
+         radioButtons(inputId = "year",
+                      label = "Time:",
+                      choices = list("Current" = "Richness", 
+                                     "Future (2041-2070)" = "FutureRichness", 
+                                     "Change C-F" = "Change_f")
+                      ),
+         
+         selectInput(inputId = "scenario",
+                     label = "Future Scenario:",
+                     choices = as.list(
+                       colnames(richness_df %>% 
+                                  dplyr::select(-x, -y, -Richness, 
+                                                -FutureRichness, 
+                                                - Change, -Change_f)))
+                     ),
+         
+         p("Distribution model of each earthworm species"),
+         
+         selectInput(inputId = "scenario_sp",
+                     label = "Scenario:",
+                     choices = list("Current" = "_current", 
+                                    "Future (mean)" = ".future_mean",
+                                    "Future (max)" = ".future_max",
+                                    "Future (min)" = ".future_min",
+                                    "gfdl-esm4 SSP126" = "_future.gfdl-esm4_ssp126",
+                                    "ipsl-cm6a-lr SSP126" = "_future.ipsl-cm6a-lr_ssp126",
+                                    "mpi-esm1-2-hr SSP126" = "_future.mpi-esm1-2-hr_ssp126",
+                                    "mri-esm2-0 SSP126" = "_future.mri-esm2-0_ssp126",
+                                    "ukesm1-0-ll SSPp126" = "_future.ukesm1-0-ll_ssp126",
+                                    "gfdl-esm4 SSP370" = "_future.gfdl-esm4_ssp370",
+                                    "ipsl-cm6a-lr SSP370" = "_future.ipsl-cm6a-lr_ssp370",
+                                    "mpi-esm1-2-hr SSP370" = "_future.mpi-esm1-2-hr_ssp370",
+                                    "mri-esm2-0 SSP370" = "_future.mri-esm2-0_ssp370",
+                                    "ukesm1-0-ll SSP370" = "_future.ukesm1-0-ll_ssp370",
+                                    "gfdl-esm4 SSP585" = "_future.gfdl-esm_ssp5854",
+                                    "ipsl-cm6a-lr SSP585" = "_future.ipsl-cm6a-lr_ssp585",
+                                    "mpi-esm1-2-hr SSP585" = "_future.mpi-esm1-2-hr_ssp585",
+                                    "mri-esm2-0 SSP585" = "_future.mri-esm2-0_ssp585",
+                                    "ukesm1-0-ll SSP585" = "_future.ukesm1-0-ll_ssp585")
+                     ),
+        
+         selectInput(inputId = "species",
+                     label = "Species:",
+                     choices = as.list(c("Allol_chlo", "Allol_eise", "Aporr_cali",
+                                       "Aporr_limi", "Aporr_long", "Aporr_rose",
+                                       "Dendr_atte", "Dendr_illy", "Dendr_octa",
+                                       "Dendr_rubi", "Eisen_feti", "Eisen_tetr",
+                                       "Lumbr_cast", "Lumbr_fest", "Lumbr_rube",
+                                       "Lumbr_terr", "Octol_cyan", "Octol_lact",
+                                       "Octol_tyrt", "Satch_mamm"))
+                     ),
+        
+         p("Please be patient, map is LOADING")
+         
         ),
+     
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("Map")
+           plotOutput("Map"),
+           
+           plotOutput("FutureMap"),
+           
+           plotOutput("SpeciesMap")
         )
     )
 )
@@ -50,12 +110,12 @@ server <- function(input, output) {
         if(input$year == "Change_f"){
           plot_map <- print(ggplot()+
                   geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-                  xlim(-23, 60) +
+                  xlim(-23, 40) +
                   ylim(31, 75) +
                   
-                  geom_tile(data=richness_df, 
+                  geom_tile(data=richness_df[richness_df[,input$year]>0,], 
                             aes(x=x, y=y, fill=richness_df[,input$year]))+
-                  ggtitle(input$year)+
+                  ggtitle("Change C-F as factor")+
                   scale_fill_viridis_d(breaks=c("[5,10]", "[0,5]", "[-5,0]", "[-10,-5]", "[-20,-10]"))+
                   theme_bw()+
                   theme(axis.title = element_blank(), legend.title = element_blank(),
@@ -63,23 +123,60 @@ server <- function(input, output) {
         }else{
           plot_map <- print(ggplot()+
                   geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-                  xlim(-23, 60) +
+                  xlim(-23, 40) +
                   ylim(31, 75) +
                   
-                  geom_tile(data=richness_df, 
+                  geom_tile(data=richness_df[richness_df[,input$year]>0,], 
                             aes(x=x, y=y, fill=richness_df[,input$year]))+
                   ggtitle(input$year)+
                   scale_fill_viridis_c()+
                   theme_bw()+
                   theme(axis.title = element_blank(), legend.title = element_blank(),
                         legend.position = c(0.1,0.4)))
-}
+        }
         print(plot_map)
         
         # save plot if save==TRUE
         #png(file=paste0(here::here(), "/figures/SpeciesRichness_", input$year,"_Lumbricidae.png"),width=1000, height=1000)
         #print(plot_map)
         #dev.off()
+    })
+    
+    output$FutureMap <- renderPlot({
+      plot_futuremap <- print(ggplot()+
+                          geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+                          xlim(-23, 40) +
+                          ylim(31, 75) +
+                          
+                          geom_tile(data=richness_df, 
+                                    aes(x=x, y=y, fill=richness_df[,input$scenario]))+
+                          ggtitle(input$scenario)+
+                          scale_fill_viridis_c()+
+                          theme_bw()+
+                          theme(axis.title = element_blank(), legend.title = element_blank(),
+                                legend.position = c(0.1,0.4)))
+      print(plot_futuremap)
+    })
+    
+    output$SpeciesMap <- renderPlot({
+     
+      column_sp <- paste0(input$species, input$scenario_sp)
+      
+      plot_speciesmap <- print(ggplot()+
+                                geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+                                xlim(-23, 40) +
+                                ylim(31, 75) +
+                                
+                                geom_tile(data=species_df[!is.na(species_df[,column_sp]),], 
+                                          aes(x=x, y=y, 
+                                              fill=as.factor(species_df[!is.na(species_df[,column_sp]),column_sp])))+
+                                ggtitle(column_sp)+
+                                scale_fill_manual(values=c("1"="#440154","0"="grey"))+
+                                theme_bw()+
+                                theme(axis.title = element_blank(), legend.title = element_blank(),
+                                      legend.position = c(0.1,0.4)))
+      print(plot_speciesmap)
+      
     })
 }
 
