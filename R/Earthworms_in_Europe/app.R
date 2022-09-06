@@ -106,7 +106,7 @@ ui <- fluidPage(
          
          br(),
          
-         p("Make sure to hit the < Apply Changes > button before saving.")
+         p("Make sure to hit the < Apply Changes > button before saving."),
          
          downloadButton("saving", label = "Save plot as .png")
          
