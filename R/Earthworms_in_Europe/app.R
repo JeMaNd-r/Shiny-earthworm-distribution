@@ -38,9 +38,13 @@ ui <- fluidPage(
          radioButtons(inputId = "year",
                       label = "Time:",
                       choices = list("Current" = "Richness", 
-                                     "Future (2041-2070)" = "FutureRichness", 
+                                     "Future (2041-2070, mean)" = "FutureRichness", 
                                      "Change C-F" = "Change_f")
                       ),
+         
+         hr(),
+         
+         h3("Future species richness (1 scenario)"),
          
          selectInput(inputId = "scenario",
                      label = "Future Scenario:",
@@ -51,7 +55,9 @@ ui <- fluidPage(
                                                 - Change, -Change_f)))
                      ),
          
-         h3("Distribution model of each earthworm species"),
+         hr(),
+         
+         h3("Distribution of one earthworm species"),
          
          selectInput(inputId = "scenario_sp",
                      label = "Scenario:",
@@ -87,6 +93,8 @@ ui <- fluidPage(
                                        "Octol_tyrt", "Satch_mamm"))
                      ),
         
+         hr(),
+         
          h3("Save one of the three maps"),
          
          radioButtons(inputId = "plotname",
@@ -106,7 +114,7 @@ ui <- fluidPage(
          
          br(),
          
-         p("Make sure to hit the < Apply Changes > button before saving."),
+         p("Make sure to hit the button < Apply Changes > before saving."),
          
          downloadButton("saving", label = "Save plot as .png")
          
@@ -124,9 +132,9 @@ ui <- fluidPage(
            
            hr(),
            
-           h2("Reference:"),
+           h3("Reference:"),
            
-           textOutput("Zeiss et al. 2023")
+           p("Zeiss et al. 2023")
         )
     )
 )
