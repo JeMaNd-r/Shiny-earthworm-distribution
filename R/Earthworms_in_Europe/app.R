@@ -7,8 +7,21 @@
 #    http://shiny.rstudio.com/
 #
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - -
+# DEAR USER: Running the app will take some seconds due to the size of the 
+#            datasets that will be loaded before starting the GUI.
+# - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 library(shiny)
 library(tidyverse)
+
+cat("# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #\n")
+cat("# DEAR USER: Running the app will take some second due to the size  #\n")
+cat("#   of the datasets that will be loaded before starting the GUI.    #\n")
+cat("# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #\n")
+cat("# If you can't allocate large vectors, clean your environment: gc() #\n")
+
+
 load("richness_df.RData") #richness_df
 load("species_df.RData") #species_df
 load("uncertain_df.RData") #uncertain_df
@@ -25,7 +38,7 @@ world.inp <- map_data("world")
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Earthworm species distributions in Europe"),
+    titlePanel("Distribution of earthworm species in Europe"),
     
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
@@ -33,8 +46,10 @@ ui <- fluidPage(
           
          p(code("Please be patient, maps are LOADING...")),
           
-         h3("Earthworm species richness in Europe"),
-   
+         h3("Richness in Europe"),
+         p("Number of earthworm species per 5 x 5 km grid cell."),
+         p(""),
+         
          radioButtons(inputId = "year",
                       label = "Time:",
                       choices = list("Current" = "Richness", 
@@ -44,7 +59,11 @@ ui <- fluidPage(
          
          hr(),
          
-         h3("Future species richness (1 scenario)"),
+         h3("Future richness"),
+         p("Number of earthworm species per 5 x 5 km grid cell under future 
+           climatic conditions (1 scenario only) or change in number of 
+           species (continuous [Change] or categorized [Change_f]."),
+         p(""),
          
          selectInput(inputId = "scenario",
                      label = "Future Scenario:",
@@ -57,7 +76,9 @@ ui <- fluidPage(
          
          hr(),
          
-         h3("Distribution of one earthworm species"),
+         h3("Species distribution"),
+         p("Distribution of 1 species under 1 scenario"),
+         p(""),
          
          selectInput(inputId = "scenario_sp",
                      label = "Scenario:",
@@ -65,21 +86,21 @@ ui <- fluidPage(
                                     "Future (mean)" = ".future_mean",
                                     "Future (max)" = ".future_max",
                                     "Future (min)" = ".future_min",
-                                    "gfdl-esm4 SSP126" = "_future.gfdl-esm4_ssp126",
-                                    "ipsl-cm6a-lr SSP126" = "_future.ipsl-cm6a-lr_ssp126",
-                                    "mpi-esm1-2-hr SSP126" = "_future.mpi-esm1-2-hr_ssp126",
-                                    "mri-esm2-0 SSP126" = "_future.mri-esm2-0_ssp126",
-                                    "ukesm1-0-ll SSPp126" = "_future.ukesm1-0-ll_ssp126",
-                                    "gfdl-esm4 SSP370" = "_future.gfdl-esm4_ssp370",
-                                    "ipsl-cm6a-lr SSP370" = "_future.ipsl-cm6a-lr_ssp370",
-                                    "mpi-esm1-2-hr SSP370" = "_future.mpi-esm1-2-hr_ssp370",
-                                    "mri-esm2-0 SSP370" = "_future.mri-esm2-0_ssp370",
-                                    "ukesm1-0-ll SSP370" = "_future.ukesm1-0-ll_ssp370",
-                                    "gfdl-esm4 SSP585" = "_future.gfdl-esm_ssp5854",
-                                    "ipsl-cm6a-lr SSP585" = "_future.ipsl-cm6a-lr_ssp585",
-                                    "mpi-esm1-2-hr SSP585" = "_future.mpi-esm1-2-hr_ssp585",
-                                    "mri-esm2-0 SSP585" = "_future.mri-esm2-0_ssp585",
-                                    "ukesm1-0-ll SSP585" = "_future.ukesm1-0-ll_ssp585")
+                                    "SSP126 gfdl-esm4" = "_future.gfdl-esm4_ssp126",
+                                    "SSP126 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp126",
+                                    "SSP126 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp126",
+                                    "SSP126 mri-esm2-0" = "_future.mri-esm2-0_ssp126",
+                                    "SSP126 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp126",
+                                    "SSP370 gfdl-esm4" = "_future.gfdl-esm4_ssp370",
+                                    "SSP370 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp370",
+                                    "SSP370 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp370",
+                                    "SSP370 mri-esm2-0" = "_future.mri-esm2-0_ssp370",
+                                    "SSP370 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp370",
+                                    "SSP585 gfdl-esm4" = "_future.gfdl-esm_ssp5854",
+                                    "SSP585 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp585",
+                                    "SSP585 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp585",
+                                    "SSP585 mri-esm2-0" = "_future.mri-esm2-0_ssp585",
+                                    "SSP585 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp585")
                      ),
         
          selectInput(inputId = "species",
@@ -95,12 +116,12 @@ ui <- fluidPage(
         
          hr(),
          
-         h3("Save one of the three maps"),
+         h3("Save one map"),
          
          radioButtons(inputId = "plotname",
                      label = "Name of the plot to save",
-                     choices = list("Richness map" = "Map",
-                                    "Future richness map" = "FutureMap",
+                     choices = list("Richness in Europe" = "Map",
+                                    "Future richness" = "FutureMap",
                                      "Species distribution" = "SpeciesMap")),
           
          textInput(inputId = "filename",
@@ -124,12 +145,16 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
+          h3("Richness in Europe"),
            plotOutput("Map"),
+           hr(),
            
+          h3("Future richness"),
            plotOutput("FutureMap"),
+           hr(),
            
+          h3("Species distribution"),
            plotOutput("SpeciesMap"),
-           
            hr(),
            
            h3("Reference:"),
@@ -144,71 +169,95 @@ server <- function(input, output) {
     
     plot_map <- reactive({
 
-      if(input$year == "Change_f"){
-        ggplot()+
-          geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-          xlim(-23, 40) +
-          ylim(31, 75) +
-          
-          geom_tile(data=richness_df[richness_df[,input$year]>0,], 
-                    aes(x=x, y=y, fill=richness_df[,input$year]))+
-          ggtitle("Change C-F as factor")+
-          scale_fill_viridis_d(breaks=c("[5,10]", "[0,5]", "[-5,0]", "[-10,-5]", "[-20,-10]"))+
-          theme_bw()+
-          theme(axis.title = element_blank(), legend.title = element_blank(),
-                legend.position = c(0.1,0.4))
-      }else{
-        ggplot()+
-          geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-          xlim(-23, 40) +
-          ylim(31, 75) +
-          
-          geom_tile(data=richness_df[richness_df[,input$year]>0,], 
-                    aes(x=x, y=y, fill=richness_df[,input$year]))+
-          ggtitle(input$year)+
-          scale_fill_viridis_c()+
-          theme_bw()+
-          theme(axis.title = element_blank(), legend.title = element_blank(),
-                legend.position = c(0.1,0.4))
-      }
+      withProgress(message = "Preparing map of distribution change", {
+        
+        if(input$year == "Change_f"){
+          ggplot()+
+            geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+            xlim(-23, 40) +
+            ylim(31, 75) +
+            
+            geom_tile(data=richness_df, 
+                      aes(x=x, y=y, fill=richness_df[,input$year]))+
+            ggtitle("Change C-F as factor")+
+            scale_fill_viridis_d(breaks=c("[5,10]", "[0,5]", "[-5,0]", "[-10,-5]", "[-20,-10]"))+
+            theme_bw()+
+            theme(axis.title = element_blank(), legend.title = element_blank(),
+                  legend.position = c(0.1,0.4))
+        }else{
+          ggplot()+
+            geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+            xlim(-23, 40) +
+            ylim(31, 75) +
+            
+            geom_tile(data=richness_df[richness_df[,input$year]>0,], 
+                      aes(x=x, y=y, fill=richness_df[,input$year]))+
+            ggtitle(input$year)+
+            scale_fill_viridis_c()+
+            theme_bw()+
+            theme(axis.title = element_blank(), legend.title = element_blank(),
+                  legend.position = c(0.1,0.4))
+        }
+      })
     })   
         
     output$Map <- renderPlot( print(plot_map()) )
     
     plot_futuremap <- reactive({
-      ggplot()+
-        geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-        xlim(-23, 40) +
-        ylim(31, 75) +
+      withProgress(message = "Preparing map of future species richness", {
         
-        geom_tile(data=richness_df, 
-                  aes(x=x, y=y, fill=richness_df[,input$scenario]))+
-        ggtitle(input$scenario)+
-        scale_fill_viridis_c()+
-        theme_bw()+
-        theme(axis.title = element_blank(), legend.title = element_blank(),
-              legend.position = c(0.1,0.4))
+        if(str_detect(input$scenario, "Change_f")){
+          ggplot()+
+            geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+            xlim(-23, 40) +
+            ylim(31, 75) +
+            
+            geom_tile(data=richness_df, 
+                      aes(x=x, y=y, fill=richness_df[,input$scenario]))+
+            ggtitle("Change C-F as factor")+
+            scale_fill_viridis_d(breaks=c("[5,10]", "[0,5]", "[-5,0]", "[-10,-5]", "[-20,-10]"))+
+            theme_bw()+
+            theme(axis.title = element_blank(), legend.title = element_blank(),
+                  legend.position = c(0.1,0.4))
+        }else{
+          ggplot()+
+            geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+            xlim(-23, 40) +
+            ylim(31, 75) +
+            
+            geom_tile(data=richness_df, 
+                      aes(x=x, y=y, fill=richness_df[,input$scenario]))+
+            ggtitle(input$scenario)+
+            scale_fill_viridis_c()+
+            theme_bw()+
+            theme(axis.title = element_blank(), legend.title = element_blank(),
+                  legend.position = c(0.1,0.4))
+        }
+      })
     })
     
     output$FutureMap <- renderPlot( print(plot_futuremap()) )
     
     plot_speciesmap <- reactive({
       
-      column_sp <- paste0(input$species, input$scenario_sp)
+      withProgress(message = "Preparing map of species distribution", {
       
-      ggplot()+
-        geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
-        xlim(-23, 40) +
-        ylim(31, 75) +
-        
-        geom_tile(data=species_df[!is.na(species_df[,column_sp]),], 
-                  aes(x=x, y=y, 
-                      fill=as.factor(species_df[!is.na(species_df[,column_sp]),column_sp])))+
-        ggtitle(column_sp)+
-        scale_fill_manual(values=c("1"="#440154","0"="grey"))+
-        theme_bw()+
-        theme(axis.title = element_blank(), legend.title = element_blank(),
-              legend.position = c(0.1,0.4))
+          column_sp <- paste0(input$species, input$scenario_sp)
+          
+          ggplot()+
+            geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
+            xlim(-23, 40) +
+            ylim(31, 75) +
+            
+            geom_tile(data=species_df[!is.na(species_df[,column_sp]),], 
+                      aes(x=x, y=y, 
+                          fill=as.factor(species_df[!is.na(species_df[,column_sp]),column_sp])))+
+            ggtitle(column_sp)+
+            scale_fill_manual(values=c("1"="#440154","0"="grey"))+
+            theme_bw()+
+            theme(axis.title = element_blank(), legend.title = element_blank(),
+                  legend.position = c(0.1,0.4))
+      })
     })
 
     output$SpeciesMap <- renderPlot( print(plot_speciesmap()) )
@@ -217,13 +266,18 @@ server <- function(input, output) {
       
         filename = renderText({ paste0(input$filename, ".png") }),
         content = function(file) {
-          png(filename=file, height=1000, width=1000)
-          if(input$plotname == "Map") print(plot_map())
-          if(input$plotname == "FutureMap") print(plot_futuremap())
-          if(input$plotname == "SpeciesMap") print(plot_speciesmap())
-          dev.off()
+          
+          withProgress(message = "Saving data", {
+            png(filename=file, height=1000, width=1000)
+            if(input$plotname == "Map") print(plot_map())
+            if(input$plotname == "FutureMap") print(plot_futuremap())
+            if(input$plotname == "SpeciesMap") print(plot_speciesmap())
+            dev.off()
+          })
         }
     )
+    
+    traceback()
     
 }
 
