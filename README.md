@@ -1,6 +1,6 @@
 # Shiny earthworm distribution
 
-Visualize maps of earthworm distribution in Europe
+Visualize maps of earthworm distribution in Europe.
 
 
 ### Prerequisites
@@ -10,10 +10,12 @@ Requirements for the software:
 - R version 4.0.3
 - R packages: tidyverse_1.3.1 with stringr_1.4.1, dplyr_1.0.7, readr_2.1.0, tidyr_1.1.4, tibble_3.1.8, and ggplot2_3.4.0; and shiny_1.7.2
 
+Size of the respository (zip-file): 62.3 MB
+
 
 ## Authors
 
-  - **Romy Zeiss** - *Provided README file, R code and data* -
+  - **Romy Zeiss** - Provided README file, R code and data -
     [JeMaNd_r](https://github.com/jemand-r)
 
 See also coauthors in Zeiss et al. (2023) who participated in this project.
@@ -21,4 +23,4 @@ See also coauthors in Zeiss et al. (2023) who participated in this project.
 
 ## License
 
-This project is licensed under the [MIT license](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the [MIT license](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details.
