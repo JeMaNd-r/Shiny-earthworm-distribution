@@ -13,6 +13,14 @@ Requirements for the software:
 Size of the respository (zip-file): 62.3 MB
 
 
+## Executing program
+
+- Open the app.R script in the ~/R/Earthworms_in_Europe folder
+- Run the app
+
+Additional files in the ~/R/Earthworms_in_Europe folder contain data. Remaining files were used for data preparation only.
+
+
 ## Authors
 
   - **Romy Zeiss** - Provided README file, R code and data -
