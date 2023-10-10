@@ -18,7 +18,9 @@ Size of the respository (zip-file): 62.3 MB
 - Open the app.R script in the ~/R/Earthworms_in_Europe folder
 - Run the app
 
-Additional files in the ~/R/Earthworms_in_Europe folder contain data. Remaining files were used for data preparation only.
+Note: Defining file name before download when saving plots as PNG does not yet work. 
+
+Additional files in the ~/R/Earthworms_in_Europe folder contain data that will be loaded to show maps. Files in unpublished ~/data/ were used for data preparation only.
 
 
 ## Authors
