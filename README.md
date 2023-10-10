@@ -26,9 +26,14 @@ Additional files in the ~/R/Earthworms_in_Europe folder contain data. Remaining 
   - **Romy Zeiss** - Provided README file, R code and data -
     [JeMaNd_r](https://github.com/jemand-r)
 
-See also coauthors in Zeiss et al. (2023) who participated in this project.
+See also coauthors in Zeiss et al. (2023) Conservation Biology who participated in this project.
 
 
 ## License
 
 This project is licensed under the [MIT license](LICENSE.md) - see the [LICENSE.md](LICENSE.md) file for details.
+
+
+## Reference
+
+Zeiss, R., Briones, M. J., Mathieu, J., Lomba, A., Dahlke, J., Heptner, L. F., ... & Guerra, C. A. (2023). Climate effects on the distribution and conservation of commonly observed European earthworms. Conservation Biology.
