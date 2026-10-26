@@ -60,6 +60,7 @@ renv/local/
 
 # Local generated output
 reports/
+tests/testthat/_snaps/
 
 # Raw data
 data/SDM_*
