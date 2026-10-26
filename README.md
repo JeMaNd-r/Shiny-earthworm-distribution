@@ -34,7 +34,8 @@ Size of the repository (zip-file): 62.3 MB
 - Open the app.R script in the project folder.
 - Run the app.
 
-Note: Defining file name before download when saving plots as PNG does not yet work. 
+> [!NOTE] 
+> Defining file name before download when saving plots as PNG does not yet work. 
 
 Files in the ~/data/ folder contain data that will be loaded to show maps. Unpublished files in ~/data/ were used for data preparation only.
 
@@ -61,12 +62,18 @@ shinytest2::test_app()
 ```
 
 
+## Troubleshooting
+
+In case of an error in memory allocation, try cleaning your environment with `gc()`. Loading the spatial data does require a lot of memory.
+
+
+
 ## Authors
 
-  - **Romy Zeiss** - Provided README file, R code and data -
-    [JeMaNd_r](https://github.com/jemand-r)
+  - **Romy Zeiss** ([JeMaNd_r](https://github.com/jemand-r)) - Provided README file, R code and data
+    
 
-See also coauthors in Zeiss et al. (2023) Conservation Biology who participated in this project.
+See also coauthors in Zeiss et al. (2024) Conservation Biology who participated in this project.
 
 
 ## License
@@ -76,4 +83,4 @@ This project is licensed under the [MIT license](LICENSE.md) - see the [LICENSE.
 
 ## Reference
 
-Zeiss, R., Briones, M. J., Mathieu, J., Lomba, A., Dahlke, J., Heptner, L. F., ... & Guerra, C. A. (2023). Climate effects on the distribution and conservation of commonly observed European earthworms. Conservation Biology.
+Zeiss, R., Briones, M. J. I., Mathieu, J., Lomba, A., Dahlke, J., Heptner, L., Salako, G., Eisenhauer, N., & Guerra, C. A. (2024). Effects of climate on the distribution and conservation of commonly observed European earthworms. Conservation Biology, 38, e14187. https://doi.org/10.1111/cobi.14187
