@@ -27,7 +27,7 @@ load("data/richness_df.RData") # richness_df
 load("data/species_df.RData") # species_df
 load("data/uncertain_df.RData") # uncertain_df
 
-filter_richness_cells_exclude_no_value(richness_df)
+richness_df <- filter_richness_cells_exclude_no_value(richness_df)
 
 # Define parameters used later
 year_df <- data.frame(
