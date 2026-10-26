@@ -8,9 +8,16 @@ Visualize maps of earthworm distribution in Europe.
 Requirements for the software:
 - 15.9 GB memory
 - R version 4.5.2
-- R packages: tidyverse_2.0.0 with stringr_1.6.0, dplyr_1.2.0, readr_2.2.0, tidyr_1.3.2, tibble_3.3.1, and ggplot2_4.0.2; and shiny_1.14.0
+- R packages
+  - tidyverse_2.0.0 with stringr_1.6.0, dplyr_1.2.0, readr_2.2.0, tidyr_1.3.2, tibble_3.3.1, and ggplot2_4.0.2
+  - shiny_1.14.0
+  - maps_3.4.4 and dependencies
+  - renv_1.3.1
+  - testthat_3.3.2 and dependencies
+  - here_1.0.2
+  - lintr_3.4.0 and styler_1.11.0
 
-Size of the respository (zip-file): 62.3 MB
+Size of the repository (zip-file): 62.3 MB
 
 
 
