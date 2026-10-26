@@ -16,6 +16,7 @@ Requirements for the software:
   - testthat_3.3.2 and dependencies
   - here_1.0.2
   - lintr_3.4.0 and styler_1.11.0
+  - shinytest2_0.5.1 and dependencies
 
 Size of the repository (zip-file): 62.3 MB
 
@@ -36,6 +37,28 @@ Size of the repository (zip-file): 62.3 MB
 Note: Defining file name before download when saving plots as PNG does not yet work. 
 
 Files in the ~/data/ folder contain data that will be loaded to show maps. Unpublished files in ~/data/ were used for data preparation only.
+
+
+## Testing
+
+Test functions only
+
+```{r}
+testthat::test_dir("tests/testthat")
+```
+
+Check style and linting
+
+```{r}
+styler::style_dir()
+lintr::lint_dir()
+```
+
+Test interface and functions
+
+```{r}
+shinytest2::test_app()
+```
 
 
 ## Authors
