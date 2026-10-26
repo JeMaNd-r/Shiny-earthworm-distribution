@@ -8,12 +8,13 @@
 #
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
-# DEAR USER: Running the app will take some seconds due to the size of the 
+# DEAR USER: Running the app will take some seconds due to the size of the
 #            datasets that will be loaded before starting the GUI.
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 library(shiny)
 library(tidyverse)
+library(maps)
 
 cat("# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #\n")
 cat("# DEAR USER: Running the app will take some second due to the size  #\n")
@@ -26,7 +27,7 @@ load("data/richness_df.RData") #richness_df
 load("data/species_df.RData") #species_df
 load("data/uncertain_df.RData") #uncertain_df
 
-richness_df <- richness_df %>% filter(!is.na(Change)) %>% filter(FutureRichness!=0 & Richness!=0)
+filter_richness_cells_exclude_no_value(richness_df)
 
 # Define parameters used later
 year_df <- data.frame("year"=c("Current", "Future (2041-2070)", "Change F-C"),
