@@ -66,6 +66,7 @@ shinytest2::test_app()
 
 In case of an error in memory allocation, try cleaning your environment with `gc()`. Loading the spatial data does require a lot of memory.
 
+It can also help to close and open the RStudio session, and/or close other applications.
 
 
 ## Authors
