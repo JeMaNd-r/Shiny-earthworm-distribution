@@ -22,9 +22,9 @@ cat("# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - #\n")
 cat("# If you can't allocate large vectors, clean your environment: gc() #\n")
 
 
-load("richness_df.RData") #richness_df
-load("species_df.RData") #species_df
-load("uncertain_df.RData") #uncertain_df
+load("data/richness_df.RData") #richness_df
+load("data/species_df.RData") #species_df
+load("data/uncertain_df.RData") #uncertain_df
 
 richness_df <- richness_df %>% filter(!is.na(Change)) %>% filter(FutureRichness!=0 & Richness!=0)
 

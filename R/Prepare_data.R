@@ -27,16 +27,16 @@ head(uncertain_df)
 # richness df
 richness_df <- average_stack
 
-save(richness_df, file="Earthworms_in_Europe/richness_df.RData")
+save(richness_df, file="../data/richness_df.RData")
 
 # species df
 species_df <- full_join(species_stack, future_stack)
 head(species_df)
 
-save(species_df, file="Earthworms_in_Europe/species_df.RData")
+save(species_df, file="../data/species_df.RData")
 
 # uncertainty df
-save(uncertain_df, file="Earthworms_in_Europe/uncertain_df.RData")
+save(uncertain_df, file="../data/uncertain_df.RData")
 
 
 
