@@ -22,6 +22,7 @@ Size of the respository (zip-file): 62.3 MB
 
 ## Executing program
 
+- Open the project file *Shiny-earthworm-distribution.Rproj* in Rstudio.
 - Open the app.R script in the project folder.
 - Run the app.
 
