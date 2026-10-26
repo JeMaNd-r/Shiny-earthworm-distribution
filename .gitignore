@@ -47,7 +47,6 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-data/
 
 # renv local package library and temporary files
 renv/library/
@@ -61,4 +60,7 @@ renv/local/
 
 # Local generated output
 reports/
+
+# Raw data
+data/SDM_*
 
