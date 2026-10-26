@@ -13,6 +13,7 @@
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 library(shiny)
+library(bslib)
 library(tidyverse)
 library(maps)
 
@@ -38,125 +39,127 @@ year_df <- data.frame(
 world.inp <- map_data("world")
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- page_sidebar(
   # Application title
-  titlePanel("Distribution of earthworm species in Europe"),
+  title = "Distribution of earthworm species in Europe",
 
   # Sidebar with a slider input for number of bins
-  sidebarLayout(
-    sidebarPanel(
-      p(code("Please be patient, maps are LOADING...")),
-      h3("Richness in Europe"),
-      p("Number of earthworm species per 5 x 5 km grid cell."),
-      p(""),
-      radioButtons(
-        inputId = "year",
-        label = "Time:",
-        choices = list(
-          "Current" = "Richness",
-          "Future (2041-2070, mean)" = "FutureRichness",
-          "Change C-F" = "Change_f"
-        )
-      ),
-      hr(),
-      h3("Future richness"),
-      p("Number of earthworm species per 5 x 5 km grid cell under future
-           climatic conditions (1 scenario only) or change in number of
-           species (continuous [Change] or categorized [Change_f]."),
-      p(""),
-      selectInput(
-        inputId = "scenario",
-        label = "Future Scenario:",
-        choices = as.list(
-          colnames(richness_df %>%
-            dplyr::select(
-              -x, -y, -Richness,
-              -FutureRichness,
-              -Change, -Change_f
-            ))
-        )
-      ),
-      hr(),
-      h3("Species distribution"),
-      p("Distribution of 1 species under 1 scenario"),
-      p(""),
-      selectInput(
-        inputId = "scenario_sp",
-        label = "Scenario:",
-        choices = list(
-          "Current" = "_current",
-          "Future (mean)" = ".future_mean",
-          "Future (max)" = ".future_max",
-          "Future (min)" = ".future_min",
-          "SSP126 gfdl-esm4" = "_future.gfdl-esm4_ssp126",
-          "SSP126 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp126",
-          "SSP126 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp126",
-          "SSP126 mri-esm2-0" = "_future.mri-esm2-0_ssp126",
-          "SSP126 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp126",
-          "SSP370 gfdl-esm4" = "_future.gfdl-esm4_ssp370",
-          "SSP370 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp370",
-          "SSP370 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp370",
-          "SSP370 mri-esm2-0" = "_future.mri-esm2-0_ssp370",
-          "SSP370 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp370",
-          "SSP585 gfdl-esm4" = "_future.gfdl-esm_ssp5854",
-          "SSP585 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp585",
-          "SSP585 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp585",
-          "SSP585 mri-esm2-0" = "_future.mri-esm2-0_ssp585",
-          "SSP585 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp585"
-        )
-      ),
-      selectInput(
-        inputId = "species",
-        label = "Species:",
-        choices = as.list(c(
-          "Allol_chlo", "Allol_eise", "Aporr_cali",
-          "Aporr_limi", "Aporr_long", "Aporr_rose",
-          "Dendr_atte", "Dendr_illy", "Dendr_octa",
-          "Dendr_rubi", "Eisen_feti", "Eisen_tetr",
-          "Lumbr_cast", "Lumbr_fest", "Lumbr_rube",
-          "Lumbr_terr", "Octol_cyan", "Octol_lact",
-          "Octol_tyrt", "Satch_mamm"
-        ))
-      ),
-      hr(),
-      h3("Save one map"),
-      radioButtons(
-        inputId = "plotname",
-        label = "Name of the plot to save",
-        choices = list(
-          "Richness in Europe" = "Map",
-          "Future richness" = "FutureMap",
-          "Species distribution" = "SpeciesMap"
-        )
-      ),
-      textInput(
-        inputId = "filename",
-        label = "Name of the .png file",
-        placeholder = "Example_name"
-      ),
-      hr(),
-      submitButton(text = "Apply Changes"),
-      br(),
-      p("Make sure to hit the button < Apply Changes > before saving."),
-      downloadButton("saving", label = "Save plot as .png")
+  sidebar = sidebar(
+    tags$h3("Richness in Europe"),
+    radioButtons(
+      inputId = "year",
+      label = "Time:",
+      choices = list(
+        "Current" = "Richness",
+        "Future*" = "FutureRichness",
+        "Change C-F" = "Change_f"
+      )
     ),
+    tags$p("* Future scenario: 2041-2070, Average"),
+    hr(),
+    tags$h3("Future richness"),
+    selectInput(
+      inputId = "scenario",
+      label = "Future Scenario:",
+      choices = as.list(
+        colnames(richness_df %>%
+          dplyr::select(
+            -x, -y, -Richness,
+            -FutureRichness,
+            -Change, -Change_f
+          ))
+      )
+    ),
+    tags$hr(),
+    tags$h3("Species distribution"),
+    selectInput(
+      inputId = "scenario_sp",
+      label = "Scenario:",
+      choices = list(
+        "Current" = "_current",
+        "Future (mean)" = ".future_mean",
+        "Future (max)" = ".future_max",
+        "Future (min)" = ".future_min",
+        "SSP126 gfdl-esm4" = "_future.gfdl-esm4_ssp126",
+        "SSP126 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp126",
+        "SSP126 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp126",
+        "SSP126 mri-esm2-0" = "_future.mri-esm2-0_ssp126",
+        "SSP126 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp126",
+        "SSP370 gfdl-esm4" = "_future.gfdl-esm4_ssp370",
+        "SSP370 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp370",
+        "SSP370 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp370",
+        "SSP370 mri-esm2-0" = "_future.mri-esm2-0_ssp370",
+        "SSP370 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp370",
+        "SSP585 gfdl-esm4" = "_future.gfdl-esm_ssp5854",
+        "SSP585 ipsl-cm6a-lr" = "_future.ipsl-cm6a-lr_ssp585",
+        "SSP585 mpi-esm1-2-hr" = "_future.mpi-esm1-2-hr_ssp585",
+        "SSP585 mri-esm2-0" = "_future.mri-esm2-0_ssp585",
+        "SSP585 ukesm1-0-ll" = "_future.ukesm1-0-ll_ssp585"
+      )
+    ),
+    selectInput(
+      inputId = "species",
+      label = "Species:",
+      choices = as.list(c(
+        "Allol_chlo", "Allol_eise", "Aporr_cali",
+        "Aporr_limi", "Aporr_long", "Aporr_rose",
+        "Dendr_atte", "Dendr_illy", "Dendr_octa",
+        "Dendr_rubi", "Eisen_feti", "Eisen_tetr",
+        "Lumbr_cast", "Lumbr_fest", "Lumbr_rube",
+        "Lumbr_terr", "Octol_cyan", "Octol_lact",
+        "Octol_tyrt", "Satch_mamm"
+      ))
+    ),
+    hr(),
+    tags$h3("Save one map"),
+    radioButtons(
+      inputId = "plotname",
+      label = "Name of the plot to save",
+      choices = list(
+        "Richness in Europe" = "Map",
+        "Future richness" = "FutureMap",
+        "Species distribution" = "SpeciesMap"
+      )
+    ),
+    textInput(
+      inputId = "filename",
+      label = "Name of the .png file",
+      placeholder = "Example_name"
+    ),
+    hr(),
+    submitButton(text = "Apply Changes"),
+    p("Make sure to hit the button 'Apply Changes' before saving."),
+    downloadButton("saving", label = "Save plot as .png")
+  ),
 
-
-    # Show a plot of the generated distribution
-    mainPanel(
-      h3("Richness in Europe"),
-      plotOutput("Map"),
-      hr(),
-      h3("Future richness"),
-      plotOutput("FutureMap"),
-      hr(),
-      h3("Species distribution"),
-      plotOutput("SpeciesMap"),
-      hr(),
-      h3("Reference:"),
-      p("Zeiss et al. 2023")
+  tags$h3("Hints"),
+  tags$p("Make sure to hit the button 'Apply Changes' before saving."),
+  tags$p(code("Please be patient, maps are LOADING...")),
+  
+  # Show a plot of the generated distribution
+  navset_card_tab(
+    nav_panel(
+      "Richness in Europe",
+      "Number of earthworm species per 5 x 5 km grid cell.",
+      plotOutput("Map")
+    ),
+    nav_panel(
+      "Future richness",
+      "Number of earthworm species per 5 x 5 km grid cell under 
+      future climatic conditions (1 scenario only) or change in 
+      number of species (continuous [Change] or categorized [Change_f].", 
+      plotOutput("FutureMap")
+    ),
+    nav_panel(
+      "Species distribution",
+      "Distribution of 1 species under 1 scenario in 5 x 5 km grid cells.",
+      plotOutput("SpeciesMap")
     )
-  )
+  ),
+  
+  tags$h3("Reference"),
+  tags$p("Zeiss, R., Briones, M. J. I., Mathieu, J., Lomba, A., Dahlke, J., Heptner, L., Salako, G., Eisenhauer, N., & Guerra, C. A. (2024). Effects of climate on the distribution and conservation of commonly observed European earthworms. Conservation Biology, 38, e14187."),
+  tags$a("DOI: 10.1111/cobi.14187", href = "https://doi.org/10.1111/cobi.14187")
 )
 
 # Define server logic required to draw a histogram
@@ -244,16 +247,22 @@ server <- function(input, output) {
   plot_speciesmap <- reactive({
     withProgress(message = "Preparing map of species distribution", {
       column_sp <- paste0(input$species, input$scenario_sp)
-
+      
+      species_plot_df <- species_df[
+        !is.na(species_df[[column_sp]]),
+        c("x", "y", column_sp),
+        drop = FALSE
+      ]
+      
       ggplot() +
         geom_map(data = world.inp, map = world.inp, aes(map_id = region), fill = "grey80") +
         xlim(-23, 40) +
         ylim(31, 75) +
         geom_tile(
-          data = species_df[!is.na(species_df[, column_sp]), ],
+          data = species_plot_df,
           aes(
             x = x, y = y,
-            fill = as.factor(species_df[!is.na(species_df[, column_sp]), column_sp])
+            fill = as.factor(.data[[column_sp]])
           )
         ) +
         ggtitle(column_sp) +
@@ -268,6 +277,10 @@ server <- function(input, output) {
 
   output$SpeciesMap <- renderPlot(print(plot_speciesmap()))
 
+  outputOptions(output, "Map", suspendWhenHidden = FALSE)
+  outputOptions(output, "FutureMap", suspendWhenHidden = TRUE)
+  outputOptions(output, "SpeciesMap", suspendWhenHidden = TRUE)
+  
   output$saving <- downloadHandler(
     filename = renderText({
       paste0(input$filename, ".png")
