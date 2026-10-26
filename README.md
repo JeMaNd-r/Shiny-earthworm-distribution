@@ -7,20 +7,27 @@ Visualize maps of earthworm distribution in Europe.
 
 Requirements for the software:
 - 15.9 GB memory
-- R version 4.0.3
-- R packages: tidyverse_1.3.1 with stringr_1.4.1, dplyr_1.0.7, readr_2.1.0, tidyr_1.1.4, tibble_3.1.8, and ggplot2_3.4.0; and shiny_1.7.2
+- R version 4.5.2
+- R packages: tidyverse_2.0.0 with stringr_1.6.0, dplyr_1.2.0, readr_2.2.0, tidyr_1.3.2, tibble_3.3.1, and ggplot2_4.0.2; and shiny_1.14.0
 
 Size of the respository (zip-file): 62.3 MB
 
 
+
+## Set up
+
+- Run `renv::restore()` to reconstruct package environment based on renv.lock file.
+- If you added packages, please use `renv::snapshot` to update the lockfile accordingly.
+
+
 ## Executing program
 
-- Open the app.R script in the ~/R/Earthworms_in_Europe folder
-- Run the app
+- Open the app.R script in the project folder.
+- Run the app.
 
 Note: Defining file name before download when saving plots as PNG does not yet work. 
 
-Additional files in the ~/R/Earthworms_in_Europe folder contain data that will be loaded to show maps. Files in unpublished ~/data/ were used for data preparation only.
+Files in the ~/data/ folder contain data that will be loaded to show maps. Unpublished files in ~/data/ were used for data preparation only.
 
 
 ## Authors

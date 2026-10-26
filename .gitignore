@@ -48,3 +48,17 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 data/
+
+# renv local package library and temporary files
+renv/library/
+renv/staging/
+renv/cellar/
+renv/local/
+
+# Local secrets and configuration
+.env
+.env.*
+
+# Local generated output
+reports/
+
